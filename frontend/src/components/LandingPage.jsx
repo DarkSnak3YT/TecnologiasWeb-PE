@@ -433,14 +433,15 @@ export default function LandingPage() {
 
       <section id="eventos" className="eventos" tabIndex="0">
         <h1>Gestão de Eventos</h1>
-        {feedback && (
-          <p className={`form-feedback ${feedback.toLowerCase().includes('sucesso') || feedback.toLowerCase().includes('adicionado') || feedback.toLowerCase().includes('atualizado') || feedback.toLowerCase().includes('removido') ? 'sucesso' : 'erro'}`}>
-            {feedback}
-          </p>
-        )}
         <div className="eventos-container">
-          <form className="eventos-formulario" onSubmit={guardarEvento}>
-            <h2>{editId ? 'Editar Evento' : 'Adicionar Novo Evento'}</h2>
+          <div className="eventos-coluna-form">
+            {feedback && (
+              <p className={`form-feedback ${feedback.toLowerCase().includes('sucesso') || feedback.toLowerCase().includes('adicionado') || feedback.toLowerCase().includes('atualizado') || feedback.toLowerCase().includes('removido') ? 'sucesso' : 'erro'}`}>
+                {feedback}
+              </p>
+            )}
+            <form className="eventos-formulario" onSubmit={guardarEvento}>
+              <h2>{editId ? 'Editar Evento' : 'Adicionar Novo Evento'}</h2>
             <div className="form-group"><label>Título do Evento</label><input value={form.titulo} onChange={e => setForm({ ...form, titulo: e.target.value })} placeholder="Seminário de Saúde Mental" /></div>
             <div className="form-group"><label>Descrição</label><input type="text" value={form.descricao} onChange={e => setForm({ ...form, descricao: e.target.value })} placeholder="Descreva o evento..." /></div>
             <div className="form-group"><label>Data do Evento</label><input type="date" value={form.data} onChange={e => setForm({ ...form, data: e.target.value })} /></div>
@@ -448,7 +449,8 @@ export default function LandingPage() {
             <div className="form-group"><label>Local do Evento</label><select className="local-evento" value={form.cidade} onChange={e => setForm({ ...form, cidade: e.target.value })}><option value="default">Selecione um local</option><option value="Ponta Delgada">Ponta Delgada</option><option value="Angra do Heroísmo">Angra do Heroísmo</option><option value="Horta">Horta</option></select></div>
             <div className="form-group"><input value={form.local} onChange={e => setForm({ ...form, local: e.target.value })} placeholder="Auditório Principal" /></div>
             <div className="form-buttons"><button className="btn-submit" type="submit">{editId ? 'Guardar Alterações' : 'Adicionar Evento'}</button>{editId && <button type="button" className="btn-cancelar" onClick={limparFormulario}>Cancelar</button>}</div>
-          </form>
+            </form>
+          </div>
 
           <div className="eventos-lista">
             <h2>Eventos Registados</h2>

@@ -289,3 +289,15 @@
     background: #e7f7ed;
     border-left: 4px solid #0f9d58;
 }
+
+
+/* Coluna esquerda dos eventos: feedback por cima da caixa do formulário */
+.eventos-coluna-form {
+    width: 100%;
+}
+
+.eventos-coluna-form .form-feedback {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 0 16px 0;
+}
