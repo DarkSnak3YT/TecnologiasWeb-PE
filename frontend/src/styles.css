@@ -271,3 +271,21 @@
         max-height: none;
     }
 }
+
+.form-feedback {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: left;
+}
+.form-feedback.erro {
+    color: #b00020;
+    background: #ffeaea;
+    border-left: 4px solid #b00020;
+}
+.form-feedback.sucesso {
+    color: #087f3f;
+    background: #e7f7ed;
+    border-left: 4px solid #0f9d58;
+}

@@ -217,6 +217,8 @@ export default function LandingPage() {
   const [eventos, setEventos] = useState([]);
   const [editId, setEditId] = useState(null);
   const [feedback, setFeedback] = useState('');
+  const [newsletterFeedback, setNewsletterFeedback] = useState('');
+  const [contactoFeedback, setContactoFeedback] = useState('');
   const [newsletter, setNewsletter] = useState({ email: '', pais: 'default' });
   const [contacto, setContacto] = useState({ nome: '', email: '', telefone: '', assunto: 'default', mensagem: '' });
   const [mostrarExtra, setMostrarExtra] = useState({});
@@ -290,52 +292,61 @@ export default function LandingPage() {
 
   async function subscrever(e) {
     e.preventDefault();
-    if (!newsletter.email.includes('@') || newsletter.pais === 'default') {
-      setFeedback('Preencha corretamente o e-mail e o país.');
+    setNewsletterFeedback('');
+    const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newsletter.email.trim());
+
+    if (!emailValido) {
+      setNewsletterFeedback('Indique um e-mail válido para subscrever a newsletter.');
       return;
     }
+    if (newsletter.pais === 'default') {
+      setNewsletterFeedback('Selecione o país antes de subscrever.');
+      return;
+    }
+
     try {
       await api.subscreverNewsletter(newsletter);
       setNewsletter({ email: '', pais: 'default' });
-      setFeedback('Subscrição registada com sucesso na base de dados.');
+      setNewsletterFeedback('Subscrição registada com sucesso na base de dados.');
     } catch (erro) {
-      setFeedback(erro.message || 'Erro ao registar subscrição.');
+      setNewsletterFeedback(erro.message || 'Erro ao registar subscrição.');
     }
   }
 
 
   async function enviarContacto(e) {
     e.preventDefault();
+    setContactoFeedback('');
     const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contacto.email.trim());
     const telefoneValido = /^\d{9}$/.test(contacto.telefone.trim());
 
     if (contacto.nome.trim().length < 2) {
-      setFeedback('Indique um nome válido no formulário de contacto.');
+      setContactoFeedback('Indique um nome válido.');
       return;
     }
     if (!emailValido) {
-      setFeedback('Indique um e-mail válido no formulário de contacto.');
+      setContactoFeedback('Indique um e-mail válido, por exemplo nome@dominio.pt.');
       return;
     }
     if (!telefoneValido) {
-      setFeedback('O telemóvel deve ter 9 dígitos.');
+      setContactoFeedback('O telemóvel deve ter exatamente 9 dígitos.');
       return;
     }
     if (contacto.assunto === 'default') {
-      setFeedback('Selecione um assunto no formulário de contacto.');
+      setContactoFeedback('Selecione um assunto.');
       return;
     }
     if (contacto.mensagem.trim().length < 5) {
-      setFeedback('Escreva uma mensagem com pelo menos 5 caracteres.');
+      setContactoFeedback('Escreva uma mensagem com pelo menos 5 caracteres.');
       return;
     }
 
     try {
       await api.enviarContacto(contacto);
       setContacto({ nome: '', email: '', telefone: '', assunto: 'default', mensagem: '' });
-      setFeedback('Mensagem de contacto guardada com sucesso na base de dados.');
+      setContactoFeedback('Mensagem de contacto guardada com sucesso na base de dados.');
     } catch (erro) {
-      setFeedback(erro.message || 'Erro ao guardar mensagem de contacto.');
+      setContactoFeedback(erro.message || 'Erro ao guardar mensagem de contacto.');
     }
   }
 
@@ -384,13 +395,14 @@ export default function LandingPage() {
           <div className="newsletter-logotipo3d"><DnaAnimado /></div>
           <div className="newsletter-formulario">
             <h3>Subscreva a nossa newsletter!</h3>
-            <form aria-label="Formulário de subscrição da newsletter" onSubmit={subscrever}>
+            <form aria-label="Formulário de subscrição da newsletter" onSubmit={subscrever} noValidate>
               <input type="email" placeholder="  📧 Insira o seu e-mail aqui" aria-label="Endereço de e-mail" value={newsletter.email} onChange={e => setNewsletter({ ...newsletter, email: e.target.value })} required />
               <select aria-label="País de residência" value={newsletter.pais} onChange={e => setNewsletter({ ...newsletter, pais: e.target.value })} required>
                 <option value="default">🏳️ Selecione o seu país</option>
                 {paises.map(pais => <option key={pais} value={pais}>{pais}</option>)}
               </select>
               <button type="submit">Subscrever</button>
+              {newsletterFeedback && <p className={`form-feedback ${newsletterFeedback.includes('sucesso') ? 'sucesso' : 'erro'}`}>{newsletterFeedback}</p>}
             </form>
           </div>
         </div>
@@ -552,6 +564,7 @@ export default function LandingPage() {
               <div className="mensagem-erro" aria-label="Assunto não pode estar vazio"></div>
               <textarea placeholder="Mensagem" className="mensagem_contacto" aria-label="Conteúdo da mensagem" value={contacto.mensagem} onChange={e => setContacto({ ...contacto, mensagem: e.target.value })} required />
               <div className="mensagem-erro" aria-label="Mensagem não pode estar vazio"></div>
+              {contactoFeedback && <p className={`form-feedback ${contactoFeedback.includes('sucesso') ? 'sucesso' : 'erro'}`}>{contactoFeedback}</p>}
               <button type="submit" className="enviar">Enviar mensagem</button>
             </form>
           </div>
