@@ -433,7 +433,11 @@ export default function LandingPage() {
 
       <section id="eventos" className="eventos" tabIndex="0">
         <h1>Gestão de Eventos</h1>
-        {feedback && <p className="feedback">{feedback}</p>}
+        {feedback && (
+          <p className={`form-feedback ${feedback.toLowerCase().includes('sucesso') || feedback.toLowerCase().includes('adicionado') || feedback.toLowerCase().includes('atualizado') || feedback.toLowerCase().includes('removido') ? 'sucesso' : 'erro'}`}>
+            {feedback}
+          </p>
+        )}
         <div className="eventos-container">
           <form className="eventos-formulario" onSubmit={guardarEvento}>
             <h2>{editId ? 'Editar Evento' : 'Adicionar Novo Evento'}</h2>
