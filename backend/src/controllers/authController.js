@@ -5,7 +5,7 @@ const { run, get } = require('../database/db');
 function criarToken(utilizador) {
   return jwt.sign(
     { id: utilizador.id, email: utilizador.email, role: utilizador.role },
-    process.env.JWT_SECRET || 'segredo_do_projeto_caca',
+    process.env.JWT_SECRET,
     { expiresIn: '2h' }
   );
 }

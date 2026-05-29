@@ -6,7 +6,7 @@ function autenticar(req, res, next) {
 
   const token = header.replace('Bearer ', '');
   try {
-    req.utilizador = jwt.verify(token, process.env.JWT_SECRET || 'segredo_do_projeto_caca');
+    req.utilizador = jwt.verify(token, process.env.JWT_SECRET);
     next();
   } catch {
     return res.status(401).json({ erro: 'Token inválido.' });
